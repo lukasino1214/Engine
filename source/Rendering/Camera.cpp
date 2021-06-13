@@ -109,6 +109,7 @@ CameraInfo Camera(GLFWwindow* window) {
 
     Info.view = View;
     Info.position = position;
+    Info.direction = direction;
 
     return Info;
 }

@@ -12,6 +12,7 @@ public:
 struct CameraInfo {
 	glm::vec3 position;
 	glm::mat4 view;
+	glm::vec3 direction;
 };
 
 CameraInfo Camera(GLFWwindow* window);

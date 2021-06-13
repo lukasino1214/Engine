@@ -17,6 +17,8 @@
 #include <glm/ext.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+// // assimp
+// #include <assimp/scene.h>
 
 // std
 #include <iostream>
@@ -35,6 +37,7 @@
 #include "Rendering/Shader.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Camera.h"
+#include "Rendering/model.h"
 
 #include "GUI/GUI.h"
 #include "GUI/Log.h"

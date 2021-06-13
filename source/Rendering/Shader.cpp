@@ -7,6 +7,8 @@
 #include <string>
 #include <sstream>
 
+bool compiled = false;
+
 Shader::Shader(const std::string& filepath) : m_FilePath(filepath), m_RendererID(0) {
     ShaderProgramSource source = ParseShader(filepath);
     m_RendererID = CreateShader(source.VertexSource, source.FragmentSource);
@@ -89,6 +91,7 @@ void Shader::Bind() const {
 
 void Shader::Unbind() const {
     GLCall(glUseProgram(0));
+    compiled = true;
 }
 
 void Shader::SetUniform1i(const std::string& name, int value) {
@@ -120,9 +123,13 @@ int Shader::GetUniformLocation(const std::string& name) {
         return m_UniformLocationCache[name];
 
     GLCall(int location = glGetUniformLocation(m_RendererID, name.c_str()));
-    if (location == -1)
-        std::cout << "Varovani: uniform '" << name << "' neexistuje!" << std::endl;
-    else
+    if (location == -1) {
+        if(!compiled) {
+            std::cout << "Varovani: uniform '" << name << "' neexistuje!" << std::endl;
+        }
+    }
+    else {
         m_UniformLocationCache[name] = location;
+    }
     return location;
 }
