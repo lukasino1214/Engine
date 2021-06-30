@@ -1,5 +1,5 @@
 
-#include "Application.h"
+#include "Application.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -46,13 +46,26 @@ int main()
     Shader shader("resources/shader/model.shader");
     //Model ourModel(FileSystem::getPath("resources/objects/backpack/backpack.obj"));
 
-    Model ourModel("resources/model/backpack/backpack.obj");
+    //Model ourModel("resources/model/backpack/backpack.obj");
 
     //Model ourModel("resources/model/gun/Handgun_obj.obj");
 
     //Model ourModel("resources/model/cottage/cottage_obj.obj");
 
     //Model ourModel("resources/model/liberty/LibertStatue.obj");
+    
+    //Model ourModel("resources/model/cube.obj");
+
+    Scene scene;
+    Entity entityla;
+    entityla.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    entityla.setModel("resources/model/backpack/backpack.obj");
+
+    scene.addEntity(entityla);
+
+
+    /*Model ourModel;
+    ourModel.Load("resources/model/cube.obj");*/
 
     //Model ourModel("resources/model/car/car.obj");
 
@@ -77,8 +90,11 @@ int main()
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         shader.SetUniformMat4f("model", model);
-        ourModel.Draw(shader);
+        //ourModel.Draw(shader);
+        scene.Render(shader);
         shader.Unbind();
+
+
 
         glfwSwapBuffers(window);
         glfwPollEvents();

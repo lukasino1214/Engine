@@ -1,4 +1,4 @@
-#include "GUI.h"
+#include "GUI.hpp"
 #include <iostream>
 
 bool Engine_GUI = true;
