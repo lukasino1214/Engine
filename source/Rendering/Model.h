@@ -11,8 +11,9 @@
 #include <assimp/postprocess.h>
 
 #include "Mesh.h"
-#include "Shader.h"
+#include "Shader.hpp"
 
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -33,10 +34,25 @@ public:
     bool gammaCorrection;
 
     // constructor, expects a filepath to a 3D model.
-    Model(string const &path, bool gamma = false) : gammaCorrection(gamma)
+    /*Model(string const &path, bool gamma = false) : gammaCorrection(gamma)
+    {
+        loadModel(path);
+    }*/
+
+    /*Model() {
+        
+    }*/
+
+    /*void Load(string const &path, bool gamma = false) : gammaCorrection(gamma)
+    {
+        loadModel(path);
+    }*/
+
+    void Load(string const &path)
     {
         loadModel(path);
     }
+
 
     // draws the model, and thus all its meshes
     void Draw(Shader &shader)

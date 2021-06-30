@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "shader.h"
+#include "shader.hpp"
 
 #include <string>
 #include <vector>
@@ -84,6 +84,10 @@ public:
             glBindTexture(GL_TEXTURE_2D, textures[i].id);
         }
         
+
+        /*for(int i=0; i<indices.size(); ++i)
+            std::cout << indices[i] << ' ';*/
+
         // draw mesh
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

@@ -1,6 +1,6 @@
-#include "Shader.h"
+#include "Shader.hpp"
 
-#include "Renderer.h"
+#include "Renderer.hpp"
 
 #include <iostream>
 #include <fstream>
