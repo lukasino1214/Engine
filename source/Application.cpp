@@ -53,6 +53,22 @@ int main()
     //Model ourModel("resources/model/cottage/cottage_obj.obj");
 
     //Model ourModel("resources/model/liberty/LibertStatue.obj");
+<<<<<<< Updated upstream
+=======
+    
+    //Model ourModel("resources/model/cube.obj");
+    //entity.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+
+    Scene scene;
+    Entity entity;
+    
+    entity.setModel("resources/model/backpack/backpack.obj");
+    scene.addEntity(entity);
+
+
+    /*Model ourModel;
+    ourModel.Load("resources/model/cube.obj");*/
+>>>>>>> Stashed changes
 
     //Model ourModel("resources/model/car/car.obj");
 
@@ -75,7 +91,7 @@ int main()
         // render the loaded model
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        //model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
         shader.SetUniformMat4f("model", model);
         ourModel.Draw(shader);
         shader.Unbind();
