@@ -9,7 +9,8 @@
 #include <glad/glad.h>
 
 // glfw
-#include <glfw/glfw3.h>
+//#include <glfw/glfw3.h>
+#include <GLFW/glfw3.h>
 
 // glm
 #include <glm/glm.hpp>
@@ -37,6 +38,7 @@
 #include "Rendering/Shader.hpp"
 //#include "Rendering/Texture.hpp"
 #include "Rendering/Camera.hpp"
+#include "Rendering/Framebuffer.hpp"
 //#include "Rendering/model.h"
 
 /*class#include "GUI/GUI.hpp"

@@ -3,7 +3,7 @@
 
 bool Engine_GUI = true;
 
-void GUI::Window(bool* p_open) {
+void GUI::Create(bool* p_open) {
     static bool opt_fullscreen = true;
     static bool opt_padding = false;
     static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;

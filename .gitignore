@@ -36,3 +36,5 @@ libraries
 out
 .vscode
 .vs
+x64
+CMakeFiles

@@ -1,9 +1,9 @@
 # Project definition
 cmake_minimum_required(VERSION 3.9)
 
-#set(CMAKE_TOOLCHAIN_FILE "C:/dev/scripts/buildsystems/vcpkg.cmake")
-
 project(Engine)
+
+include(C:/dev/scripts/buildsystems/vcpkg.cmake)
 
 # Source files
 #set(CMAKE_BUILD_TYPE Debug)
@@ -27,12 +27,13 @@ file(GLOB GUI_H "${SRC_DIR}/GUI/*.h")
 
 find_package(imgui CONFIG REQUIRED)
 find_path(STB_INCLUDE_DIRS "stb.h")
-find_package(glm CONFIG REQUIRED)
-find_package(glad CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
+find_package(glad CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
 find_package(assimp CONFIG REQUIRED)
 
-add_executable(${PROJECT_NAME} ${APP_S} ${APP_H} ${REN_S} ${REN_H} ${GUI_S} ${GUI_H})
+#add_executable(${PROJECT_NAME} ${APP_S} ${APP_H} ${REN_S} ${REN_H} ${GUI_S} ${GUI_H})
+add_executable(${PROJECT_NAME} ${APP_S} ${APP_H} ${REN_S} ${REN_H})
 target_include_directories(${PROJECT_NAME} PRIVATE "${SRC_DIR}")
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 
@@ -44,3 +45,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 target_link_libraries(${PROJECT_NAME} PRIVATE assimp::assimp)
 
 file(COPY ${dir}/resources DESTINATION ${dir}/build/Debug)
+
+

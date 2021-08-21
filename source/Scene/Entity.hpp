@@ -8,7 +8,9 @@
 
 class Entity {
 private:
-    std::string name;
+    int n_id;
+
+    std::string m_Name;
 
     glm::vec3 m_Position;
     glm::vec3 m_Rotation;
@@ -17,13 +19,19 @@ private:
     Model m_Model;
 
 public:
-    void setPosition(const glm::vec3 &position) { /*position = m_Position;*/ m_Position = position; }
+    void setId(const int &id) { n_id = id; }
+    int getId() const { return n_id; }
+
+    void setName(const std::string &name) { m_Name = name; }
+    std::string getName() const { return m_Name; }
+
+    void setPosition(const glm::vec3 &position) { m_Position = position; }
     glm::vec3 getPosition() const { return m_Position; }
 
-    void setRotation(const glm::vec3 &rotation) { /*rotation = m_Rotation;*/ m_Rotation = rotation; }
+    void setRotation(const glm::vec3 &rotation) { m_Rotation = rotation; }
     glm::vec3 getRotation() const { return m_Rotation; }
 
-    void setScale(const glm::vec3 &scale) { /*scale = m_Scale;*/ m_Scale = scale; }
+    void setScale(const glm::vec3 &scale) { m_Scale = scale; }
     glm::vec3 getScale() const { return m_Scale; }
 
     void setModel(const std::string &path) {  m_Model.Load(path); }
