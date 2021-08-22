@@ -7,8 +7,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1280;
+const unsigned int SCR_HEIGHT = 720;
 
 int main()
 {
@@ -75,8 +75,6 @@ int main()
     bool enable = true;
 
 
-
-
     Scene scene;
     Entity entity, entity2, entity3;
     //Entity entity2;
@@ -85,7 +83,7 @@ int main()
     
     entity.setName("backpack 1");
     entity.setModel("resources/model/backpack/backpack.obj");
-    entity.setPosition(glm::vec3(3.0f, 0.0f, 0.0f));
+    entity.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     entity.setRotation(glm::vec3(0.0f));
     entity.setScale(glm::vec3(1.0f));
 
@@ -109,7 +107,7 @@ int main()
 
     bool Camera_Move = false;
     bool first = true;
-    int selected_Entity = 0;
+    int selected_Entity = {};
 
     FramebufferSpecification fbSpec;
     fbSpec.Height = SCR_HEIGHT;
@@ -122,30 +120,54 @@ int main()
 
     std::cout << glad_glGetString(GL_VERSION) << std::endl;
 
+    glm::vec2 m_ViewportSize = {};
+
+    int m_GizmoType;
+
+    int mouseX, mouseY;
+
+    int pixelData;
+
     while (!glfwWindowShouldClose(window)) {
 
         glfwPollEvents();
         m_Framebuffer.Bind();
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        pixelData = m_Framebuffer.ReadPixel(1, mouseX, mouseY);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         m_Framebuffer.ClearAttachment(1, -1);
 
         auto[mx, my] = ImGui::GetMousePos();
-        mx -= m_ViewportBounds[0].x;
-        my -= m_ViewportBounds[0].y;
-        glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
-        my = viewportSize.y - my;
-        int mouseX = (int)mx;
-        int mouseY = (int)my;
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		my = viewportSize.y - my;
+	    mouseX = (int)mx;
+		mouseY = (int)my;
+
         if(mouseX >= 0 && mouseY >=0 && mouseX < (int)viewportSize.x && mouseY << (int)viewportSize.y) {
-            int pixelData = m_Framebuffer.ReadPixel(1, mouseX, mouseY);
-            std::cout << pixelData << std::endl;
-            //std::cout << mouseX << " " << mouseY << std::endl;
+            //int pixelData = m_Framebuffer.ReadPixel(1, mouseX, mouseY);
+            /*std::cout << "###########################################################################################################################" << std::endl;
+            std::cout << "- pixelData " << pixelData << std::endl;
+            std::cout << "---------------------------------------------------------------------------------------------------------------------------" << std::endl;
+            std::cout << "- mousePos " << mouseX << " " << mouseY << std::endl;*/
+            //std::cout << m_Framebuffer.TestPixel() << std::endl;
+            //m_Framebuffer.TestPixel();
+
+            if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+                if(pixelData <= scene.getMaxID() && 0 <= pixelData) {
+                    selected_Entity = pixelData;
+                    //std::cout << "yes" << std::endl;
+                    //std::cout << pixelData << std::endl; 
+                }
+            }
         }
 
+        //selected_Entity = pixelData;
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        ImGuizmo::BeginFrame();
         
         bool p_open = true;
         static bool opt_fullscreen = true;
@@ -241,6 +263,11 @@ int main()
             }
             ImGui::End();
 
+            /*if(pixelData != -1 && pixelData != 708049008) {
+                selected_Entity = pixelData;
+            }*/
+
+
             glm::vec3 position = entities[selected_Entity].getPosition();
             glm::vec3 rotation = entities[selected_Entity].getRotation();
             glm::vec3 scale = entities[selected_Entity].getScale();
@@ -248,53 +275,110 @@ int main()
             ImGui::Begin("Entity info");
 
             ImGui::Text("Name: %s", entities[selected_Entity].getName().c_str());
-            //ImGui::SliderFloat("float", &test.x, 0.0f, 1.0f);
             ImGui::SliderFloat3("Position: ", &position.x, -10.0f, 10.0f);
             ImGui::SliderFloat3("Rotation: ", &rotation.x, -180.0f, 180.0f);
             ImGui::SliderFloat3("Scale: ", &scale.x, 0.0f, 2.0f);
-
-
-            //std::cout << glm::to_string(test) << std::endl;
 
             entities[selected_Entity].setPosition(position);
             entities[selected_Entity].setRotation(rotation);
             entities[selected_Entity].setScale(scale);
 
-            scene.setEntities(entities);
-
-            //ImGui::SliderFloat3("float: ", &test.x, -10.0f, 10.0f, );
-            //ImGui::Text("Position: x: %f, y: %f, z: %f", entities[selected_Entity].getPosition().x, entities[selected_Entity].getPosition().y, entities[selected_Entity].getPosition().z);
             ImGui::End();
 
         }
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 1.0f));
         ImGui::Begin("Viewport");
-        auto viewportOffset = ImGui::GetCursorPos();
+        //auto viewportOffset = ImGui::GetCursorPos();
+        //glm::vec2 m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-        glm::vec2 m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
         if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize)) {
             m_Framebuffer.Resize(viewportPanelSize.x, viewportPanelSize.y);
+            camera.SetProjection(viewportPanelSize.x, viewportPanelSize.y);
             m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-            std::cout << "changed" << std::endl;
         }
-        camera.SetProjection(viewportPanelSize.x, viewportPanelSize.y);
         //camera.Move(window);
         //ImGui::Image((void*)textureColorbuffer, ImVec2{ 400.0f, 300.0f }, ImVec2(0, 1), ImVec2(1, 0));
         //ImGui::GetContentRegionAvail();
-        ImGui::Image((void*)m_Framebuffer.GetColorAttachmentRendererID(0), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)m_Framebuffer.GetColorAttachmentRendererID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2(0, 1), ImVec2(1, 0));
 
-        auto windowSize = ImGui::GetWindowSize();
+        /*auto windowSize = ImGui::GetWindowSize();
         ImVec2 minBound = ImGui::GetWindowPos();
         minBound.x += viewportOffset.x;
         minBound.y += viewportOffset.y;
 
         ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
         m_ViewportBounds[0] = { minBound.x, minBound.y };
-        m_ViewportBounds[1] = { maxBound.x, maxBound.y };
+        m_ViewportBounds[1] = { maxBound.x, maxBound.y };*/
 
+        auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+            if (!ImGuizmo::IsUsing())
+                m_GizmoType = -1;
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            if (!ImGuizmo::IsUsing())
+                m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+            if (!ImGuizmo::IsUsing())
+                m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+            if (!ImGuizmo::IsUsing())
+                m_GizmoType = ImGuizmo::OPERATION::SCALE;
+		}
+
+        // Gizmos
+        ImGuizmo::SetOrthographic(false);
+        ImGuizmo::SetDrawlist();
+        float windowWidth = (float)ImGui::GetWindowWidth();
+        float winodwHeight = (float)ImGui::GetWindowHeight();
+        ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, winodwHeight);
+        glm::mat4 transform = entities[selected_Entity].getTransform();
+        ImGuizmo::Manipulate(glm::value_ptr(camera.GetView()), glm::value_ptr(camera.GetProjection()), (ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform));
+        if (ImGuizmo::IsUsing()) {
+				glm::vec3 translation, rotation, scale;
+				//Math::DecomposeTransform(transform, translation, rotation, scale);
+
+				entities[selected_Entity].setPosition(translation);
+				entities[selected_Entity].setRotation(rotation);
+				entities[selected_Entity].setScale(scale);
+
+                scene.setEntities(entities);
+			}
         ImGui::End();
+
+        scene.setEntities(entities);
+
+        /*ImGui::Begin("Color Attachment");
+        ImGui::Image((void*)m_Framebuffer.GetColorAttachmentRendererID(1), ImVec2{ ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y }, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::End();*/
         ImGui::PopStyleVar();
+
+        //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+        if(glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
+            Camera_Move = true;
+        }
+
+        if(Camera_Move) {
+            camera.Move(window);
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+        
+        if(glfwGetKey(window, GLFW_KEY_BACKSPACE) == GLFW_PRESS) {
+            Camera_Move = false;
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
 
         ImGui::Render();
 
@@ -315,6 +399,7 @@ int main()
         scene.Render(shader);
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
         m_Framebuffer.Unbind();
+
 
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

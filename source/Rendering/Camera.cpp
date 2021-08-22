@@ -153,12 +153,11 @@ Camera::Camera(GLFWwindow* window, const FramebufferSpecification& spec) : m_Spe
 }
 
 void Camera::Move(GLFWwindow* window) {
-       static double lastTime = glfwGetTime();
+    static double lastTime = glfwGetTime();
     double currentTime = glfwGetTime();
     float deltaTime = float(currentTime - lastTime);
 
     double xpos, ypos;
-
 
     glfwGetCursorPos(window, &xpos, &ypos);
 

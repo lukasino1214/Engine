@@ -2,6 +2,11 @@
 
 #include <vector>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/ext.hpp>
+#include <glm/gtx/string_cast.hpp>
+
 enum class FramebufferTextureFormat
 	{
 		None = 0,
@@ -44,12 +49,13 @@ class Framebuffer {
 
         void Resize(int Width, int Height);
         int ReadPixel(unsigned int attachmentIndex, int x, int y);
+        void TestPixel();
         void Invalidate();
 
         void Bind();
         void Unbind();
 
-        void ClearAttachment(uint32_t attachmentIndex, int value);
+        void ClearAttachment(unsigned int attachmentIndex, int value);
 
         unsigned int GetColorAttachmentRendererID(unsigned int index = 0) { return m_ColorAttachments[index]; }
 

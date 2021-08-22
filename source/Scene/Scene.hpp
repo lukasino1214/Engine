@@ -11,6 +11,7 @@ class Scene {
     private:
         std::string m_Name;
         std::vector<Entity> m_Entities;
+        int m_MaxID;
 
     public:
 
@@ -20,9 +21,12 @@ class Scene {
         void setEntities(const std::vector<Entity> &entities) { 
             m_Entities = entities; 
             for(int i = 0; i < entities.size(); i++) {
-                m_Entities[i].setId(i);
+                m_Entities[i].setID(i);
+                m_MaxID = i;
             }
         }
+
+        int getMaxID() { return m_MaxID; }
 
         std::vector<Entity> getEntities() const { return m_Entities; }
         void addEntity(Entity entity) { m_Entities.push_back(entity); }
@@ -52,7 +56,10 @@ class Scene {
                 glm::mat4 scale = glm::scale(glm::mat4(1.0f), m_Entities[i].getScale());
 			    glm::mat4 model = translation * rotation * scale;
 
+                int id = m_Entities[i].getID();
+
                 shader.SetUniformMat4f("model", model);
+                shader.SetUniform1i("EntityID", id);
                 m_Entities[i].Draw(shader);
                 shader.Unbind();
             }

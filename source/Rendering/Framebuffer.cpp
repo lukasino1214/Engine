@@ -179,9 +179,6 @@ void Framebuffer::Bind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 	glViewport(0, 0, m_Specification.Width, m_Specification.Height);
-
-	int value = -1;
-	glClearTexImage(m_ColorAttachments[1], 0, GL_RED_INTEGER, GL_INT, &value);
 }
 
 void Framebuffer::Unbind()
@@ -194,16 +191,17 @@ void Framebuffer::Resize(int width, int height)
 	if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
 	{
 		//HZ_CORE_WARN("Attempted to rezize framebuffer to {0}, {1}", width, height);
-		std::cout << "Width" << width << " " << "Height" << height << std::endl;
+		std::cout << "Width " << width << " " << "Height " << height << std::endl;
 		return;
 	}
+
 	m_Specification.Width = width;
 	m_Specification.Height = height;
 	
 	Invalidate();
 }
 
-int Framebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
+int Framebuffer::ReadPixel(unsigned int attachmentIndex, int x, int y)
 {
 	glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 	int pixelData;
@@ -211,7 +209,15 @@ int Framebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
 	return pixelData;
 }
 
-void Framebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+void Framebuffer::TestPixel()
+{
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	unsigned int data[4];
+	glReadPixels(0, 0, 1, 1, GL_RGBA8, GL_UNSIGNED_BYTE, &data);
+	std::cout << data[1] << " " << data[2] << " " << data[3] << " " << data[4] << std::endl;
+}
+
+void Framebuffer::ClearAttachment(unsigned int attachmentIndex, int value)
 {
 	auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
 	glClearTexImage(m_ColorAttachments[attachmentIndex], 0,
