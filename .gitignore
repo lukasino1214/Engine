@@ -38,3 +38,15 @@ out
 .vs
 x64
 CMakeFiles
+
+Engine.dir/
+ALL_BUILD.vcxproj
+ALL_BUILD.vcxproj.filters
+CMakeCache.txt
+Engine.sln
+Engine.vcxproj
+Engine.vcxproj.filters
+ZERO_CHECK.vcxproj
+material.txt
+ZERO_CHECK.vcxproj.filters
+cmake_install.cmake
