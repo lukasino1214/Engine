@@ -48,3 +48,5 @@
 
 //#include "Scene/Entity.hpp"
 #include "Scene/Scene.hpp"
+
+#include "Panel/ContentBrowserPanel.hpp"

@@ -10,7 +10,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "Mesh.h"
+#include "Mesh.hpp"
 #include "Shader.hpp"
 
 #include <iostream>
@@ -51,6 +51,7 @@ public:
     void Load(string const &path)
     {
         loadModel(path);
+        m_Path = path;
     }
 
 
@@ -60,8 +61,11 @@ public:
         for(unsigned int i = 0; i < meshes.size(); i++)
             meshes[i].Draw(shader);
     }
+
+    std::string GetPath() { return m_Path; }
     
 private:
+    std::string m_Path;
     // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
     void loadModel(string const &path)
     {

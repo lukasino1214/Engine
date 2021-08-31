@@ -14,7 +14,7 @@ int main()
 {
     glfwInit();
 
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "The game engine", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "ARISE engine", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -61,6 +61,36 @@ int main()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
+    auto& colors = ImGui::GetStyle().Colors;
+		colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f };
+
+		// Headers
+		colors[ImGuiCol_Header] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_HeaderHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+		colors[ImGuiCol_HeaderActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		
+		// Buttons
+		colors[ImGuiCol_Button] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+		colors[ImGuiCol_ButtonActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
+		// Frame BG
+		colors[ImGuiCol_FrameBg] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_FrameBgHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+		colors[ImGuiCol_FrameBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
+		// Tabs
+		colors[ImGuiCol_Tab] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TabHovered] = ImVec4{ 0.38f, 0.3805f, 0.381f, 1.0f };
+		colors[ImGuiCol_TabActive] = ImVec4{ 0.28f, 0.2805f, 0.281f, 1.0f };
+		colors[ImGuiCol_TabUnfocused] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TabUnfocusedActive] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+
+		// Title
+		colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
@@ -76,7 +106,7 @@ int main()
 
 
     Scene scene;
-    Entity entity, entity2, entity3;
+    Entity entity, entity2, entity3, entity4;
     //Entity entity2;
     //CameraInfo camera;
     std::vector<Entity> entities;
@@ -99,9 +129,16 @@ int main()
     entity3.setRotation(glm::vec3(0.0f));
     entity3.setScale(glm::vec3(1.0f));
 
+    entity4.setName("chair 1");
+    entity4.setModel("resources/model/chair/chair.fbx");
+    entity4.setPosition(glm::vec3(2.0f, 0.0f, 0.0f));
+    entity4.setRotation(glm::vec3(0.0f));
+    entity4.setScale(glm::vec3(0.001f));
+
     entities.push_back(entity);
     entities.push_back(entity2);
     entities.push_back(entity3);
+    entities.push_back(entity4);
 
     scene.setEntities(entities);
 
@@ -127,6 +164,12 @@ int main()
     int mouseX, mouseY;
 
     int pixelData;
+
+    //Texture file("file.png");
+
+    ContentBrowserPanel m_ContentBrowserPanel;
+    /*TextureViewer m_TextureViewer;
+    m_TextureViewer.SetTexture("file.png");*/
 
     while (!glfwWindowShouldClose(window)) {
 
@@ -168,6 +211,12 @@ int main()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();
+
+        //m_TextureViewer.OnImGuiRender();
+
+        /*ImGui::Begin("adad");
+        ImGui::Image((ImTextureID)file.GetRenderID(), { 128, 128 }, { 0, 1 }, { 1, 0 });
+        ImGui::End();*/
         
         bool p_open = true;
         static bool opt_fullscreen = true;
@@ -255,12 +304,35 @@ int main()
         //Entity list
         {
             ImGui::Begin("Entity list");
-            for(int i = 0; i < entities.size(); i++) {
+            /*for(int i = 0; i < entities.size(); i++) {
                 //ImGui::Text("%s", entities[i].getName());
                 if(ImGui::Button(entities[i].getName().c_str(), ImVec2(80, 25))) {
                     selected_Entity = i;
                 }
             }
+
+            if(ImGui::TreeNode("Test Scene")) {
+            ImGui::TreeNodeEx("aaaa");
+            ImGui::TreeNodeEx("aaaa");
+            ImGui::TreeNodeEx("aaaa");
+            }*/
+            //ImGui::TreePop();
+
+
+            if(ImGui::TreeNode("Test Scene")) {
+                for(int i = 0; i < entities.size(); i++) {
+                    //ImGui::Text("%s", entities[i].getName());
+                    /*if(ImGui::Button(entities[i].getName().c_str(), ImVec2(80, 25))) {
+                        selected_Entity = i;
+                    }*/
+                    if(ImGui::TreeNodeEx(entities[i].getName().c_str())) {}
+
+                    if(ImGui::IsItemClicked()) {
+                        selected_Entity = i;
+                    }
+                }
+            }
+
             ImGui::End();
 
             /*if(pixelData != -1 && pixelData != 708049008) {
@@ -286,6 +358,8 @@ int main()
             ImGui::End();
 
         }
+
+        m_ContentBrowserPanel.OnImGuiRender();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 1.0f));
         ImGui::Begin("Viewport");

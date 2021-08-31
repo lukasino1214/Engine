@@ -5,7 +5,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "../Rendering/Model.h"
+#include "../Rendering/Model.hpp"
 #include "../Rendering/Shader.hpp"
 
 class Entity {
@@ -46,6 +46,7 @@ public:
         return glm::translate(glm::mat4(1.0f), m_Position) * rotation * glm::scale(glm::mat4(1.0f), m_Scale); }
 
     void setModel(const std::string &path) {  m_Model.Load(path); }
+    std::string getModel() { return m_Model.GetPath(); }
 
     void Draw(Shader &shader) { m_Model.Draw(shader); }
 };

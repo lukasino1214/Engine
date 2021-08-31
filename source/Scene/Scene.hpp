@@ -26,6 +26,8 @@ class Scene {
             }
         }
 
+        //std::vector<Entity> GetEntities() { return m_Entities; }
+
         int getMaxID() { return m_MaxID; }
 
         std::vector<Entity> getEntities() const { return m_Entities; }
