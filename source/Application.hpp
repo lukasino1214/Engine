@@ -47,6 +47,6 @@
 #include "GUI/Viewport.hpp"*/
 
 //#include "Scene/Entity.hpp"
-#include "Scene/Scene.hpp"
+#include "Scene/SceneSerializer.hpp"
 
 #include "Panel/ContentBrowserPanel.hpp"

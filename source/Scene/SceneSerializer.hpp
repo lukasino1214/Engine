@@ -15,4 +15,4 @@ class SceneSerializer {
         void DeserializeRuntime(std::string filepath);
     private:
         Scene m_Scene;
-}
+};
